@@ -85,7 +85,6 @@ void imprimiraoContrario(No *no) {
     printf("\n\n");
 }
 
-// Função para liberar a memória de todos os nós da lista
 void destruir_lista(No **lista) {
     No *aux;
     while (*lista != NULL) {
@@ -93,22 +92,20 @@ void destruir_lista(No **lista) {
         *lista = (*lista)->proximo;
         free(aux);
     }
-    printf("Lista destruída e memória liberada.\n");
 }
 
-// Função para concatenar duas listas
+
 void concatenar_listas(No **lista1, No **lista2) {
     if (*lista1 == NULL) {
-        *lista1 = *lista2;  // Se a primeira lista está vazia, apenas aponta para a segunda
+        *lista1 = *lista2;  
     } else if (*lista2 != NULL) {
-        No *ultimo1 = ultimo(lista1);  // Encontra o último nó da primeira lista
-        ultimo1->proximo = *lista2;    // Liga o último nó da primeira lista ao primeiro da segunda
-        (*lista2)->anterior = ultimo1; // Define o ponteiro anterior do primeiro nó da segunda lista
+        No *ultimo1 = ultimo(lista1);  
+        ultimo1->proximo = *lista2;    
+        (*lista2)->anterior = ultimo1; 
     }
-    *lista2 = NULL;  // A segunda lista agora aponta para NULL, pois foi concatenada
+    *lista2 = NULL;  
 }
 
-// Função para imprimir ambas as listas
 void imprimir_duas_listas(No *lista1, No *lista2) {
     printf("Lista 1:\n");
     imprimir(lista1);
@@ -121,7 +118,7 @@ int main() {
     No *buscado, *lista1 = NULL, *lista2 = NULL;
 
     do {
-        printf("1: Inserir na Lista 1\n2: Inserir na Lista 2\n3: Concatenar Listas\n4: Imprimir Lista 1\n5: Imprimir Lista 2\n6: Imprimir Ambas as Listas\n7: Sair\n");
+        printf("1: Inserir na Lista 1\n2: Inserir na Lista 2\n3: Concatenar Listas\n4: Imprimir Lista 1\n5: Imprimir Lista 2\n6: Imprimir Ambas as Listas\n7: buscar\n 8:Sair\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
 
@@ -183,7 +180,7 @@ int main() {
                 printf("Opcao invalida!\n");
                 break;
         }
-    } while (opcao != 7);
+    } while (opcao != 8);
 
     return 0;
 }
