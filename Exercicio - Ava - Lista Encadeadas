@@ -1,0 +1,189 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct no {
+    int valor;
+    struct no *proximo;
+    struct no *anterior;
+} No;
+
+void inserir_no_inicio(No **lista, int num) {
+    No *novo = malloc(sizeof(No));
+    if (novo) {
+        novo->valor = num;
+        novo->proximo = *lista;
+        novo->anterior = NULL;
+        if (*lista)
+            (*lista)->anterior = novo;
+        *lista = novo;
+    } else {
+        printf("Erro ao alocar memoria\n");
+    }
+}
+
+void inserir_no_final(No **lista, int num) {
+    No *aux, *novo = malloc(sizeof(No));
+    if (novo) {
+        novo->valor = num;
+        novo->proximo = NULL;
+
+        if (*lista == NULL) {
+            *lista = novo;
+            novo->anterior = NULL;
+        } else {
+            aux = *lista;
+            while (aux->proximo) {
+                aux = aux->proximo;
+            }
+            aux->proximo = novo;
+            novo->anterior = aux;
+        }
+    } else {
+        printf("Erro ao alocar memoria\n");
+    }
+}
+
+No* buscar(No **lista, int num) {
+    No *aux = *lista;
+    while (aux && aux->valor != num) {
+        aux = aux->proximo;
+    }
+    return aux;
+}
+
+void imprimir(No *no) {
+    if (no == NULL) {
+        printf("Lista vazia\n");
+        return;
+    }
+    printf("Lista: ");
+    while (no != NULL) {
+        printf("%d ", no->valor);
+        no = no->proximo;
+    }
+    printf("\n\n");
+}
+
+No* ultimo(No **lista) {
+    No *aux = *lista;
+    while (aux->proximo) {
+        aux = aux->proximo;
+    }
+    return aux;
+}
+
+void imprimiraoContrario(No *no) {
+    if (no == NULL) {
+        printf("Lista vazia\n");
+        return;
+    }
+    printf("Lista ao contrário: ");
+    while (no != NULL) {
+        printf("%d ", no->valor);
+        no = no->anterior;
+    }
+    printf("\n\n");
+}
+
+// Função para liberar a memória de todos os nós da lista
+void destruir_lista(No **lista) {
+    No *aux;
+    while (*lista != NULL) {
+        aux = *lista;
+        *lista = (*lista)->proximo;
+        free(aux);
+    }
+    printf("Lista destruída e memória liberada.\n");
+}
+
+// Função para concatenar duas listas
+void concatenar_listas(No **lista1, No **lista2) {
+    if (*lista1 == NULL) {
+        *lista1 = *lista2;  // Se a primeira lista está vazia, apenas aponta para a segunda
+    } else if (*lista2 != NULL) {
+        No *ultimo1 = ultimo(lista1);  // Encontra o último nó da primeira lista
+        ultimo1->proximo = *lista2;    // Liga o último nó da primeira lista ao primeiro da segunda
+        (*lista2)->anterior = ultimo1; // Define o ponteiro anterior do primeiro nó da segunda lista
+    }
+    *lista2 = NULL;  // A segunda lista agora aponta para NULL, pois foi concatenada
+}
+
+// Função para imprimir ambas as listas
+void imprimir_duas_listas(No *lista1, No *lista2) {
+    printf("Lista 1:\n");
+    imprimir(lista1);
+    printf("Lista 2:\n");
+    imprimir(lista2);
+}
+
+int main() {
+    int opcao, valor;
+    No *buscado, *lista1 = NULL, *lista2 = NULL;
+
+    do {
+        printf("1: Inserir na Lista 1\n2: Inserir na Lista 2\n3: Concatenar Listas\n4: Imprimir Lista 1\n5: Imprimir Lista 2\n6: Imprimir Ambas as Listas\n7: Sair\n");
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                printf("Digite um valor para inserir na Lista 1: ");
+                scanf("%d", &valor);
+                inserir_no_final(&lista1, valor);
+                break;
+
+            case 2:
+                printf("Digite um valor para inserir na Lista 2: ");
+                scanf("%d", &valor);
+                inserir_no_final(&lista2, valor);
+                break;
+
+            case 3:
+                concatenar_listas(&lista1, &lista2);
+                printf("Listas concatenadas.\n");
+                break;
+
+            case 4:
+                printf("Lista 1:\n");
+                imprimir(lista1);
+                break;
+
+            case 5:
+                printf("Lista 2:\n");
+                imprimir(lista2);
+                break;
+
+            case 6:
+                imprimir_duas_listas(lista1, lista2);
+                break;
+
+             case 7:
+                printf("Digite um valor para buscar: ");
+                scanf("%d", &valor);
+                buscado = buscar(&lista1, valor);
+                if (buscado) {
+                    printf("Elemento %d encontrado na Lista 1.\n", valor);
+                } else {
+                    buscado = buscar(&lista2, valor);
+                    if (buscado) {
+                        printf("Elemento %d encontrado na Lista 2.\n", valor);
+                    } else {
+                        printf("Elemento %d não encontrado em nenhuma das listas.\n", valor);
+                    }
+                }
+                break;
+
+            case 8:
+                printf("Saindo e destruindo a lista\n");
+                destruir_lista(&lista1); 
+                destruir_lista(&lista2);
+                break;
+
+            default:
+                printf("Opcao invalida!\n");
+                break;
+        }
+    } while (opcao != 7);
+
+    return 0;
+}
