@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+
+void buscaVetor(int vetor[4], int busca){
+    int i;
+    for ( i = 0; i < 4; i++)
+    {
+       if(vetor[i] == busca)
+       {
+        printf("Valor do vetor: %d", vetor[i]);
+    }else{
+        printf("Nao foi possivel buscar esse valor\n");
+    }
+    
+}
+}
+
+int main(){
+
+    int vetor[4] = {1, 2, 3, 4};
+    int busca = 4;
+
+    buscaVetor(vetor, busca);
+
+
+}
